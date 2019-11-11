@@ -5,7 +5,7 @@ const server = require('../src/app');
 
 describe('ADMIN FUNCTIONS', () => {
   beforeEach(async () => {
-    await request(server).delete('/reset-table');
+    const responseach = await request(server).delete('/reset-table');
   });
   describe('POST auth/create-user', () => {
     it('returns an object data with property userId', async () => {
