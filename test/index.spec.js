@@ -30,7 +30,7 @@ describe('ADMIN FUNCTIONS', () => {
         lastName: 'Oslo',
         email: 'test@maria.com',
         password: 'password',
-        gender: 'Female',
+        gender: 'female',
         jobRole: 'employee',
         department: 'IT',
         address: '103, Longroad',
