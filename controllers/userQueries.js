@@ -121,6 +121,19 @@ const updateArticle = (request, response) => {
   );
 };
 
+const deleteArticle = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  const articleId = parseInt(request.params.articleId, 10);
+  pool.query('DELETE FROM articles WHERE "userId" = $1 AND "articleId" = $2', [id, articleId], (error, results) => {
+    if (error) {
+      response.json({
+        status: 'error',
+        error: error.detail,
+      });
+    }
+    response.status(200).json({ status: 'success', data: { message: 'Article successfully deleted', articleId } });
+  });
+};
 
 module.exports = {
   signIn,
@@ -128,4 +141,5 @@ module.exports = {
   getArticles,
   getArticleById,
   updateArticle,
+  deleteArticle,
 };
