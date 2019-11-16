@@ -164,4 +164,14 @@ describe('USER FUNCTIONS', () => {
       expect(response.body).to.have.property('data');
     });
   });
+
+  describe('DELETE /articles/:articleId /*specific user deletes specific own article*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/articles`);
+      const response = await request(server).delete(`/users/${responseone.body.data[0].userId}/articles/${responsetwo.body.data[0].articleId}`);
+      expect(response.body).to.have.property('data');
+    });
+  });
+
 });
