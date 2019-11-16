@@ -5,7 +5,7 @@ const server = require('../src/app');
 
 describe('ADMIN FUNCTIONS', () => {
   beforeEach(async () => {
-    await request(server).delete('/reset-table').end(); // trial
+    await request(server).delete('/reset-table');
   });
   describe('POST auth/create-user', () => {
     it('returns an object data with property userId', async () => {
@@ -30,7 +30,7 @@ describe('ADMIN FUNCTIONS', () => {
         lastName: 'Oslo',
         email: 'test@maria.com',
         password: 'password',
-        gender: 'female',
+        gender: 'Female',
         jobRole: 'employee',
         department: 'IT',
         address: '103, Longroad',
@@ -100,6 +100,39 @@ describe('ADMIN FUNCTIONS', () => {
       const responseone = await request(server).get('/users/');
       const response = await request(server).delete(`/users/${responseone.body.data[0].userId}`);
       expect(response.body).to.have.property('data');
+    });
+  });
+});
+
+describe('USER FUNCTIONS', () => {
+  describe('POST /auth/signin /*signs in user*/', () => {
+    it('returns a response body with property data', async () => {
+      await request(server).post('/auth/create-user').send({
+        firstName: 'Maria',
+        lastName: 'Oslo',
+        email: 'test@maria.com',
+        password: 'password',
+        gender: 'Female',
+        jobRole: 'employee',
+        department: 'IT',
+        address: '103, Longroad',
+      });
+      const response = await request(server).post('/auth/signin').send({
+        email: 'test@maria.com',
+        password: 'password',
+      });
+      expect(response.body).to.have.property('data');
+    });
+  });
+  describe('POST /articles/ /*specific user creates article*/', () => {
+    it('returns a response body with property data with property articleId', async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/articles`).send({
+        articleTitle: 'Lorem',
+        article: 'Lor ipsum',
+      });
+      expect(response.body).to.have.property('data');
+      expect(response.body.data).to.have.property('articleId');
     });
   });
 });
