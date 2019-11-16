@@ -14,13 +14,13 @@ const signIn = (request, response) => {
 
   pool.query('SELECT * FROM users WHERE email = $1', [email], (error, results) => {
     if (error) {
-      response.json({ status: 'error', error });
+      response.json({ status: 'error', error: error.detail });
     } else if (results.rows.length !== 1) {
       response.json({ status: 'error', error: 'invalid login' })
     } else {
       pool.query('SELECT * FROM users WHERE email = $1', [email], (error, results) => {
         if (error) {
-          response.json({ status: 'error', error });
+          response.json({ status: 'error', error: error.detail });
         }
         const dbpassword = results.rows[0].password;
         bcrypt.compare(password, dbpassword).then((res) => {
