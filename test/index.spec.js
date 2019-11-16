@@ -152,4 +152,16 @@ describe('USER FUNCTIONS', () => {
       expect(response.body).to.have.property('data');
     });
   });
+
+  describe('PATCH /articles/:articleId /*specific user edits specific own article*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/articles`);
+      const response = await request(server).patch(`/users/${responseone.body.data[0].userId}/articles/${responsetwo.body.data[0].articleId}`).send({
+        articleTitle: 'Edited Title',
+        article: 'Edited Article',
+      });
+      expect(response.body).to.have.property('data');
+    });
+  });
 });

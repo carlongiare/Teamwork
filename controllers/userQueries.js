@@ -100,9 +100,32 @@ const getArticleById = (request, response) => {
   });
 };
 
+const updateArticle = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  const articleId = parseInt(request.params.articleId, 10);
+  const {
+    articleTitle, article,
+  } = request.body;
+  pool.query(
+    'UPDATE articles SET "articleTitle" = $1, "article" = $2  WHERE "userId" = $3 AND "articleId = $4"',
+    [articleTitle, article, id, articleId],
+    (error, results) => {
+      if (error) {
+        response.json({
+          status: 'error',
+          error: error.detail,
+        });
+      }
+      response.status(200).json({ status: 'success', data: { message: 'Article successfully updated', articleId } });
+    },
+  );
+};
+
+
 module.exports = {
   signIn,
   createArticle,
   getArticles,
   getArticleById,
+  updateArticle,
 };

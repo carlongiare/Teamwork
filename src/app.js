@@ -23,6 +23,6 @@ app.post('/auth/signin', user.signIn);
 app.post('/users/:id/articles', user.createArticle);
 app.get('/users/:id/articles', user.getArticles);
 app.get('/users/:id/articles/:articleId', user.getArticleById);
-
+app.patch('/users/:id/articles/:articleId', user.getArticleById);
 
 module.exports = app;
