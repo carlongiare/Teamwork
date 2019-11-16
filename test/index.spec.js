@@ -128,11 +128,28 @@ describe('USER FUNCTIONS', () => {
     it('returns a response body with property data with property articleId', async () => {
       const responseone = await request(server).get('/users/');
       const response = await request(server).post(`/users/${responseone.body.data[0].userId}/articles`).send({
-        articleTitle: 'Lorem',
-        article: 'Lor ipsum',
+        articleTitle: 'New Title',
+        article: 'New Article',
       });
       expect(response.body).to.have.property('data');
       expect(response.body.data).to.have.property('articleId');
+    });
+  });
+
+  describe('GET /articles/ /*specific user gets own articles*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).get(`/users/${responseone.body.data[0].userId}/articles`);
+      expect(response.body).to.have.property('data');
+    });
+  });
+
+  describe('GET /articles/:articleId /*specific user gets specific own article by id*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/articles`);
+      const response = await request(server).get(`/users/${responseone.body.data[0].userId}/articles/${responsetwo.body.data[0].articleId}`);
+      expect(response.body).to.have.property('data');
     });
   });
 });

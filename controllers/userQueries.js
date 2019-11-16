@@ -67,8 +67,42 @@ const createArticle = (request, response) => {
   });
 };
 
+const getArticles = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  pool.query('SELECT * FROM articles WHERE "userId" = $1 ORDER BY "userId" ASC', [id], (error, results) => {
+    if (error) {
+      response.status(500).json({
+        status: 'error',
+        error: error.detail,
+      });
+    }
+    response.status(200).json({
+      status: 'successful',
+      data: results.rows,
+    });
+  });
+};
+
+const getArticleById = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  const articleId = parseInt(request.params.articleId, 10);
+  pool.query('SELECT * FROM articles WHERE "userId" = $1 AND "articleId" = $2', [id, articleId], (error, results) => {
+    if (error) {
+      response.status(500).json({
+        status: 'error',
+        error: error.detail,
+      });
+    }
+    response.status(200).json({
+      status: 'successful',
+      data: results.rows[0],
+    });
+  });
+};
 
 module.exports = {
   signIn,
   createArticle,
+  getArticles,
+  getArticleById,
 };

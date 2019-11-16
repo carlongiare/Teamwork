@@ -21,5 +21,8 @@ app.delete('/reset-table', admin.deleteAllRows); // this route is only used in m
 // user functions
 app.post('/auth/signin', user.signIn);
 app.post('/users/:id/articles', user.createArticle);
+app.get('/users/:id/articles', user.getArticles);
+app.get('/users/:id/articles/:articleId', user.getArticleById);
+
 
 module.exports = app;
