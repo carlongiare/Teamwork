@@ -174,4 +174,40 @@ describe('USER FUNCTIONS', () => {
     });
   });
 
+  describe('POST /gifs/ /*specific user creates gif*/', () => {
+    it('returns a response body with property data with property gifId', async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/gifs`).field({
+        title: 'New Gif Title',
+      }).attach('image', 'test/image.png');
+      expect(response.body).to.have.property('data');
+      expect(response.body.data).to.have.property('gifId');
+    });
+  });
+
+  describe('GET /gifs/ /*specific user gets own gifs*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).get(`/users/${responseone.body.data[0].userId}/gifs`);
+      expect(response.body).to.have.property('data');
+    });
+  });
+
+  describe('GET /gifs/:gifId /*specific user gets specific own gif by id*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/gifs`);
+      const response = await request(server).get(`/users/${responseone.body.data[0].userId}/gifs/${responsetwo.body.data[0].gifId}`);
+      expect(response.body).to.have.property('data');
+    });
+  });
+
+  describe('DELETE /gifs/:gifId /*specific user deletes specific own gif*/', () => {
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/gifs`);
+      const response = await request(server).delete(`/users/${responseone.body.data[0].userId}/gifs/${responsetwo.body.data[0].gifId}`);
+      expect(response.body).to.have.property('data');
+    });
+  });
 });
