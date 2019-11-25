@@ -224,6 +224,67 @@ const deleteGif = (request, response) => {
   });
 };
 
+const createArticleComment = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  const articleId = parseInt(request.params.articleId, 10);
+  const { articleComment } = request.body;
+  pool.query('INSERT INTO "articleComments" ("userId", "articleId", "articleComment") VALUES ($1, $2, $3)', [id, articleId, articleComment], (error, results) => {
+    if (error) {
+      response.json({
+        status: 'error',
+        error: error.detail,
+      });
+    } else {
+      pool.query('SELECT * FROM "articleComments" WHERE "articleComment" = $1 AND "userId" = $2', [articleComment, id], (error, results) => {
+        if (error) {
+          response.json({
+            status: 'error',
+            error: error.detail,
+          });
+        }
+        response.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Comment successfully created',
+            createdOn: results.rows[0].date,
+            comment: results.rows[0].articleComment,
+          },
+        });
+      });
+    }
+  });
+};
+
+const createGifComment = (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  const gifId = parseInt(request.params.gifId, 10);
+  const { gifComment } = request.body;
+  pool.query('INSERT INTO "gifComments" ("userId", "gifId", "gifComment") VALUES ($1, $2, $3)', [id, gifId, gifComment], (error, results) => {
+    if (error) {
+      response.json({
+        status: 'error',
+        error: error.detail,
+      });
+    } else {
+      pool.query('SELECT * FROM "gifComments" WHERE "gifComment" = $1 AND "userId" = $2', [gifComment, id], (error, results) => {
+        if (error) {
+          response.json({
+            status: 'error',
+            error: error.detail,
+          });
+        }
+        response.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Comment successfully created',
+            createdOn: results.rows[0].date,
+            comment: results.rows[0].gifComment,
+          },
+        });
+      });
+    }
+  });
+};
 
 module.exports = {
   signIn,
@@ -236,4 +297,6 @@ module.exports = {
   getGifs,
   getGifById,
   deleteGif,
+  createArticleComment,
+  createGifComment,
 };

@@ -32,6 +32,9 @@ app.post('/users/:id/gifs', upload.single('image'), user.createGif);
 app.get('/users/:id/gifs', user.getGifs);
 app.get('/users/:id/gifs/:gifId', user.getGifById);
 app.delete('/users/:id/gifs/:gifId', user.deleteGif);
+// comments
+app.post('/users/:id/gifs/:gifId/comments', user.createGifComment);
+app.post('/users/:id/articles/:articleId/comments', user.createArticleComment);
 
 
 module.exports = app;

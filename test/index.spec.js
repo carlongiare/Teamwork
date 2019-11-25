@@ -210,4 +210,40 @@ describe('USER FUNCTIONS', () => {
       expect(response.body).to.have.property('data');
     });
   });
+
+  describe('POST /articles/:articleId/comments /*specific user creates article comment*/', () => {
+    before(async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/articles`).send({
+        articleTitle: 'New Title',
+        article: 'New Article',
+      });
+    });
+
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/articles`);
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/articles/${responsetwo.body.data[0].articleId}/comments`).send({
+        articleComment: 'New Article Comment',
+      });
+      expect(response.body).to.have.property('data');
+    });
+  });
+
+  describe('POST /gifs/:gifId/comments /*specific user creates gif comment*/', () => {
+    before(async () => {
+      const responseone = await request(server).get('/users/');
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/gifs`).field({
+        title: 'New Gif Title',
+      }).attach('image', 'test/image.png');
+    });
+    it('returns a response body with property data', async () => {
+      const responseone = await request(server).get('/users/');
+      const responsetwo = await request(server).get(`/users/${responseone.body.data[0].userId}/gifs`);
+      const response = await request(server).post(`/users/${responseone.body.data[0].userId}/gifs/${responsetwo.body.data[0].gifId}/comments`).send({
+        gifComment: 'New Gif Comment',
+      });
+      expect(response.body).to.have.property('data');
+    });
+  });
 });
